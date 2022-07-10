@@ -46,10 +46,23 @@ export class SExpress {
   
   private _createServer(): http.Server {
     return http.createServer((req, res)=> {
-      const emit = this._emitter.emit(this._getRouteMask(req.url, <HttpMethods>req.method), req, res);
-      if(emit === false) {
-        res.end(`rout for ${this._getRouteMask(req.url, <HttpMethods>req.method)} is not exist`);
-      }
+      let body = "";
+
+      req.on('data', (chank)=>{
+        body += chank;
+      });
+
+      req.on("end", () => {
+        if(body !== ""){
+          //@ts-ignore
+          req.body = JSON.parse(body);  
+        }
+
+        const isEmit = this._emitter.emit(this._getRouteMask(req.url, <HttpMethods>req.method), req, res);
+        if(isEmit === false) {
+          res.end(`rout for ${this._getRouteMask(req.url, <HttpMethods>req.method)} is not exist`);
+        }
+      })
     })
   }
 

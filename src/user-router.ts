@@ -21,5 +21,14 @@ userRouter.get('/users', (_, resp) => {
 
 userRouter.post('/users', (req, resp) => {
   // @ts-ignore
-  resp.send('send from /users:post');
+  const user = req.body;
+  console.log(user);
+  if(user === undefined) {
+    resp.end("Ошибка ввода данных");
+  }
+  const userId = (parseInt(users[users.length-1].id) + 1).toString();
+  const newUser: User = {...user, id: userId};
+  users.push(newUser);
+  // @ts-ignore
+  resp.send({newUser});
 });
