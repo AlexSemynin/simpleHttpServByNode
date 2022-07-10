@@ -1,0 +1,15 @@
+{
+  "name": "simplehttpserver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cross-env PORT=5000 node ./index.js"
+  },
+  "author": "AlexSemynin",
+  "license": "ISC",
+  "dependencies": {
+    "cross-env": "^7.0.3"
+  }
+}
