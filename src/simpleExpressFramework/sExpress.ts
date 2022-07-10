@@ -7,6 +7,7 @@ export class SExpress {
 
   private _emitter: EventEmitter;
   private _server: http.Server;
+  private _middlewares: ((req: http.ClientRequest, resp: http.ServerResponse) => void)[];
 
   public get Emitter() {
     return this._emitter;
@@ -15,10 +16,15 @@ export class SExpress {
   constructor(){
     this._emitter = new EventEmitter();
     this._server = this._createServer();
+    this._middlewares = [];
   }
 
   public listen(port: string | number, callback: ()=>void) {
     this._server.listen(port, callback);
+  }
+
+  public use(middleware: (req: http.ClientRequest, resp: http.ServerResponse) => void){
+    this._middlewares.push(middleware);
   }
 
   public addRouter(router: Router) {
@@ -29,6 +35,7 @@ export class SExpress {
         const handler = endpoint[method];
 
         this._emitter.on(this._getRouteMask(path, <HttpMethods>method), (req, res) => {
+          this._middlewares.forEach(middleware => middleware(req, res))
           handler(req, res);
         });
 

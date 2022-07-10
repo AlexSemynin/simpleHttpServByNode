@@ -15,12 +15,11 @@ const users: User[] = [{
 export const userRouter = new Router();
 
 userRouter.get('/users', (_, resp) => {
-  resp.writeHead(200, {
-    'Content-type': 'application/json; charset=utf8'
-  })
-  resp.end(JSON.stringify(users));
+  // @ts-ignore
+  resp.send(users);
 });
 
 userRouter.post('/users', (req, resp) => {
-  resp.end('send from /users:post');
+  // @ts-ignore
+  resp.send('send from /users:post');
 });

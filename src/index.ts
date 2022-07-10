@@ -3,6 +3,7 @@ import * as http from 'http';
 import { Router } from './simpleExpressFramework/Router';
 import { SExpress } from './simpleExpressFramework/sExpress';
 import {userRouter} from './user-router';
+import {parseJsonMiddleware} from './midlewares/parseJson';
 
 
 env.config();
@@ -12,6 +13,8 @@ console.log(process.env.NODE_ENV);
 
 
 const sExpress = new SExpress();
-sExpress.addRouter(userRouter);
-sExpress.listen(PORT, () => console.log(`server started on ${PORT}`));
 
+sExpress.addRouter(userRouter);
+sExpress.use(parseJsonMiddleware);
+
+sExpress.listen(PORT, () => console.log(`server started on ${PORT}`));
