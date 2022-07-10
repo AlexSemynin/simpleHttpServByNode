@@ -2,7 +2,7 @@ import { Http2ServerRequest, Http2ServerResponse } from "http2";
 import { EventEmitter } from 'events';
 import * as http from 'http';
 
-export const emitter = new EventEmitter();
+// export const emitter = new EventEmitter();
 
 export class Router {
   constructor() {
@@ -21,9 +21,9 @@ export class Router {
       }
 
       addedEndopint[method] = handler;
-      emitter.on(`[${path}]:[${method}]`, (req: http.ClientRequest, resp: http.ServerResponse) => {
-        handler(req, resp);
-      });
+      // emitter.on(`[${path}]:[${method}]`, (req: http.ClientRequest, resp: http.ServerResponse) => {
+      //   handler(req, resp);
+      // });
   }
 
   public get(path: string, handler: httpReuestListner ) {

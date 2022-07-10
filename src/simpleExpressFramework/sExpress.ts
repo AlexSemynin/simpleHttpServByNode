@@ -1,0 +1,53 @@
+// const http = require("http");
+import {EventEmitter} from 'events';
+import http, { METHODS } from 'http';
+import { HttpMethods, Router } from './Router';
+
+export class SExpress {
+
+  private _emitter: EventEmitter;
+  private _server: http.Server;
+
+  public get Emitter() {
+    return this._emitter;
+  }
+
+  constructor(){
+    this._emitter = new EventEmitter();
+    this._server = this._createServer();
+  }
+
+  public listen(port: string | number, callback: ()=>void) {
+    this._server.listen(port, callback);
+  }
+
+  public addRouter(router: Router) {
+    Object.keys(router.endpoints).forEach(path => {
+      const endpoint = router.endpoints[path];
+      Object.keys(endpoint).forEach(method => {
+        //@ts-ignore
+        const handler = endpoint[method];
+
+        this._emitter.on(this._getRouteMask(path, <HttpMethods>method), (req, res) => {
+          handler(req, res);
+        });
+
+      })
+    });
+  }
+
+  
+  private _createServer(): http.Server {
+    return http.createServer((req, res)=> {
+      const emit = this._emitter.emit(this._getRouteMask(req.url, <HttpMethods>req.method), req, res);
+      if(emit === false) {
+        res.end(`rout for ${this._getRouteMask(req.url, <HttpMethods>req.method)} is not exist`);
+      }
+    })
+  }
+
+  private _getRouteMask(path?: string, method?: HttpMethods) {
+    return `[${path}]:[${method}]`
+  }
+
+}
