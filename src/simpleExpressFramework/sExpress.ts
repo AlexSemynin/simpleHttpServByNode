@@ -1,13 +1,13 @@
 // const http = require("http");
 import {EventEmitter} from 'events';
 import http, { METHODS } from 'http';
-import { HttpMethods, Router } from './Router';
+import { HttpMethods, httpReuestListner, Router } from './Router';
 
 export class SExpress {
 
   private _emitter: EventEmitter;
   private _server: http.Server;
-  private _middlewares: ((req: http.ClientRequest, resp: http.ServerResponse) => void)[];
+  private _middlewares: httpReuestListner[];
 
   public get Emitter() {
     return this._emitter;
