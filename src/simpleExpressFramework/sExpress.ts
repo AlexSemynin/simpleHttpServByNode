@@ -7,7 +7,7 @@ export class SExpress {
 
   private _emitter: EventEmitter;
   private _server: http.Server;
-  private _middlewares: httpReuestListner[];
+  private _middlewares: ((req: http.IncomingMessage, resp: http.ServerResponse) => void)[];
 
   public get Emitter() {
     return this._emitter;
@@ -23,7 +23,7 @@ export class SExpress {
     this._server.listen(port, callback);
   }
 
-  public use(middleware: (req: http.ClientRequest, resp: http.ServerResponse) => void){
+  public use(middleware: (req: http.IncomingMessage, resp: http.ServerResponse) => void){
     this._middlewares.push(middleware);
   }
 

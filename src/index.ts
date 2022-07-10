@@ -4,6 +4,7 @@ import { Router } from './simpleExpressFramework/Router';
 import { SExpress } from './simpleExpressFramework/sExpress';
 import {userRouter} from './user-router';
 import {parseJsonMiddleware} from './midlewares/parseJson';
+import { parseUrl } from './midlewares/parseUrl';
 
 
 env.config();
@@ -16,5 +17,6 @@ const sExpress = new SExpress();
 
 sExpress.addRouter(userRouter);
 sExpress.use(parseJsonMiddleware);
+sExpress.use(parseUrl('http:localhost:5000'));
 
 sExpress.listen(PORT, () => console.log(`server started on ${PORT}`));

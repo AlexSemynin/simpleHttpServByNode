@@ -1,6 +1,6 @@
 import * as http from 'http';
 
-export const parseJsonMiddleware = (req: http.ClientRequest , resp: http.ServerResponse) => {
+export const parseJsonMiddleware = (req: http.IncomingMessage, resp: http.ServerResponse) => {
   resp.writeHead(200, {
     'Content-type': 'application/json; charset=utf8'
   });
