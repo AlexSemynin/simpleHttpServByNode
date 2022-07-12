@@ -7,5 +7,13 @@ import { URL } from 'url';
 export const parseUrl = (baseUrl: string) => (req:http.IncomingMessage, resp: http.ServerResponse) => {
   const parsedUrl = new URL(req.url!, baseUrl);
 
-  console.log(parsedUrl);
+  //@ts-ignore
+  req.pathName = parsedUrl.pathname;
+  const params = {};
+  parsedUrl.searchParams.forEach((value, key) => {
+    //@ts-ignore
+    params[key] = value; 
+  });
+  //@ts-ignore
+  req.params = params;
 }

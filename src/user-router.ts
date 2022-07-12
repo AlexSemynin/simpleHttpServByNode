@@ -14,7 +14,12 @@ const users: User[] = [{
 
 export const userRouter = new Router();
 
-userRouter.get('/users', (_, resp) => {
+userRouter.get('/users', (req, resp) => {
+  //@ts-ignore
+  if(req.params?.id !== undefined) {
+    //@ts-ignore 
+    resp.send(users.find(u => u.id === req.params?.id));
+  }
   // @ts-ignore
   resp.send(users);
 });

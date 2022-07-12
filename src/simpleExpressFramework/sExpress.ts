@@ -35,7 +35,6 @@ export class SExpress {
         const handler = endpoint[method];
 
         this._emitter.on(this._getRouteMask(path, <HttpMethods>method), (req, res) => {
-          this._middlewares.forEach(middleware => middleware(req, res))
           handler(req, res);
         });
 
@@ -57,8 +56,11 @@ export class SExpress {
           //@ts-ignore
           req.body = JSON.parse(body);  
         }
-
-        const isEmit = this._emitter.emit(this._getRouteMask(req.url, <HttpMethods>req.method), req, res);
+        
+        this._middlewares.forEach(middleware => middleware(req, res));
+        
+        //@ts-ignore
+        const isEmit = this._emitter.emit(this._getRouteMask(req.pathName, <HttpMethods>req.method), req, res);
         if(isEmit === false) {
           res.end(`rout for ${this._getRouteMask(req.url, <HttpMethods>req.method)} is not exist`);
         }
