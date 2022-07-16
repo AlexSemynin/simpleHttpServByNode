@@ -17,11 +17,19 @@ export const userRouter = new Router();
 userRouter.get('/users', (req, resp) => {
   //@ts-ignore
   if(req.params?.id !== undefined) {
-    //@ts-ignore 
-    resp.send(users.find(u => u.id === req.params?.id));
+    //@ts-ignore
+    const userId = req.params?.id;
+    const user = users.find(u => u.id === userId);
+    if(user === undefined) {
+      resp.end(`user with id={${userId}} not found`);
+    }
+    //@ts-ignore
+    resp.send(user);
   }
-  // @ts-ignore
-  resp.send(users);
+  else{
+    // @ts-ignore
+    resp.send(users);
+  }
 });
 
 userRouter.post('/users', (req, resp) => {
