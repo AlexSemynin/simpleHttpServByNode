@@ -1,6 +1,7 @@
 // const http = require("http");
 import {EventEmitter} from 'events';
 import http, { METHODS } from 'http';
+import { CustomDB } from '../CustomDB';
 import { HttpMethods, httpReuestListner, Router } from './Router';
 
 export class SExpress {
@@ -8,6 +9,7 @@ export class SExpress {
   private _emitter: EventEmitter;
   private _server: http.Server;
   private _middlewares: ((req: http.IncomingMessage, resp: http.ServerResponse) => void)[];
+  private _db: CustomDB|undefined = undefined;
 
   public get Emitter() {
     return this._emitter;
@@ -27,6 +29,10 @@ export class SExpress {
     this._middlewares.push(middleware);
   }
 
+  public connect(db: CustomDB) {
+    this._db = db;
+  }
+
   public addRouter(router: Router) {
     Object.keys(router.endpoints).forEach(path => {
       const endpoint = router.endpoints[path];
@@ -35,7 +41,7 @@ export class SExpress {
         const handler = endpoint[method];
 
         this._emitter.on(this._getRouteMask(path, <HttpMethods>method), (req, res) => {
-          handler(req, res);
+          handler(req, res, this._db);
         });
 
       })

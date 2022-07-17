@@ -1,6 +1,7 @@
 import { Http2ServerRequest, Http2ServerResponse } from "http2";
 import { EventEmitter } from 'events';
 import * as http from 'http';
+import { CustomDB } from "../CustomDB";
 
 // export const emitter = new EventEmitter();
 
@@ -50,4 +51,4 @@ export type MethodDictionary = {
   [method in HttpMethods]: httpReuestListner;
 };
 
-export type httpReuestListner = (req: http.ClientRequest, resp: http.ServerResponse) => void;
+export type httpReuestListner = (req: http.ClientRequest, resp: http.ServerResponse, db: CustomDB) => void;
