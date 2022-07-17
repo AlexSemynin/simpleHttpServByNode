@@ -5,15 +5,24 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon ./index.js"
+    "start": "node ./dist/index.js",
+    "build": "tsc",
+    "build-watch": "nodemon ./src/index.ts",
+    "build-start": "npm run build && npm run start",
+    "build-dev-watch": "npm run build-watch && npm run start"
   },
   "author": "AlexSemynin",
   "license": "ISC",
   "dependencies": {
     "cross-env": "^7.0.3",
-    "dotenv": "^16.0.1"
+    "dotenv": "^16.0.1",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "nodemon": "^2.0.19"
+    "@types/node": "^18.0.3",
+    "@types/uuid": "^8.3.4",
+    "nodemon": "^2.0.19",
+    "ts-node": "^10.8.2",
+    "typescript": "^4.7.4"
   }
 }
