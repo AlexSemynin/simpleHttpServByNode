@@ -2,6 +2,7 @@ import fs from 'fs';
 import path, { resolve } from 'path';
 import { User } from './models/user';
 import { v1 as uuidv1 } from 'uuid';
+import { ECollection } from '.';
 
 export class CustomDB {
 
@@ -39,7 +40,7 @@ export class CustomDB {
    * @param collectionName имя коллекции
    * @returns collectionName
    */
-  public async tryGetCollectionName(collectionName: string) {
+  public async tryGetCollectionName(collectionName: ECollection) {
     return (await this.getCollections()).find(c => c === collectionName);
   }
 
@@ -48,7 +49,7 @@ export class CustomDB {
    * @param collectionName 
    * @returns 
    */
-  public async addCollection(collectionName: string) {
+  public async addCollection(collectionName: ECollection) {
     const isCollectionExist = this._collectionsNames.findIndex(c => c === collectionName) !== -1;
     if(isCollectionExist) {
       console.log("Коллекция уже существует");
@@ -63,7 +64,7 @@ export class CustomDB {
    * @param entity 
    * @returns 
    */
-  public async addEntity(collectionName: string, entity: any) {
+  public async addEntity(collectionName: ECollection, entity: any) {
     const id = uuidv1();
     entity.id = id;
     const userString = JSON.stringify(entity);
@@ -84,7 +85,7 @@ export class CustomDB {
    * @param collectionName 
    * @returns 
    */
-  public async GetAll<T>(collectionName: string) {
+  public async GetAll<T>(collectionName: ECollection) {
     const userCollectionName = await this.tryGetCollectionName(collectionName);
     if(userCollectionName === undefined) {
       console.log(`Коллекция ${collectionName} не найдена`);
@@ -98,5 +99,10 @@ export class CustomDB {
 
     const entityes: T[] = data.split('\n').map(en => JSON.parse(en));
     return entityes;
+  }
+
+  public async GetEntity<T extends { id?: string }>(collectionName: ECollection, entityId: string) {
+    const entityes = await this.GetAll<T>(collectionName);
+    return entityes?.find(en => en.id === entityId) ?? null;
   }
 }

@@ -8,7 +8,10 @@ import { parseUrl } from './midlewares/parseUrl';
 import path from 'path';
 import {CustomDB} from './CustomDB';
 
-
+export enum ECollection {
+  UserCollection = "userCollection.txt",
+  PostCollection = "postCollection.txt",
+}
 env.config();
 const PORT = process.env.PORT || 5000;
 console.log(process.pid);
@@ -17,8 +20,9 @@ console.log(process.env.NODE_ENV);
 
 const sExpress = new SExpress();
 const curretnPath = path.resolve(__dirname, '../../db');
-const userCollection = 'userCollection.txt';
 const db = new CustomDB(curretnPath);
+
+const userCollection = ECollection.UserCollection;
 
 db.tryGetCollectionName(userCollection).then(collectionName => {
   if(collectionName === undefined){
