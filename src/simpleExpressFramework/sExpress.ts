@@ -58,9 +58,16 @@ export class SExpress {
       });
 
       req.on("end", () => {
-        if(body !== ""){
+        try{
+          if(body !== ""){
+            //@ts-ignore
+            req.body = JSON.parse(body);  
+          }
+        }catch(e){
+          console.log("Некорректный формат");
           //@ts-ignore
-          req.body = JSON.parse(body);  
+          res.end(e.message);
+          return;
         }
         
         this._middlewares.forEach(middleware => middleware(req, res));
